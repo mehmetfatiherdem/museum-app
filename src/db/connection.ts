@@ -1,18 +1,35 @@
 import mongoose from 'mongoose';
 
-const url = process.env.DB_URL as string;
+class DBConnection {
+  private static instance: DBConnection;
+  private static count: number;
+  private readonly url: string = process.env.DB_URL;
 
-function connectToMongo() {
-  mongoose.connect(url);
+  constructor() {
+    mongoose.connect(this.url);
 
-  const db = mongoose.connection;
+    const { connection } = mongoose;
 
-  db.once('open', () => {
-    console.log(`Database connected: ${url}`);
-  });
-  db.on('error', (error) => {
-    console.log(`Database connection error: ${error}`);
-  });
+    connection
+      .once('open', () => {
+        console.log(`Database connected: ${this.url}`);
+      })
+      .on('error', (error) => {
+        console.log(`Database connection error: ${error}`);
+      });
+  }
+
+  public static getInstance() {
+    if (this.instance == null) {
+      this.instance = new DBConnection();
+      this.count = 0;
+    }
+
+    this.count++;
+    console.info(`DB connection requested ${this.count} times`);
+
+    return this.instance;
+  }
 }
 
-export default connectToMongo;
+export default DBConnection;
