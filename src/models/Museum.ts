@@ -1,12 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { DayNames } from '../helpers/type';
-
-type WorkingTimes = {
-  [key in DayNames]: {
-    opening: string;
-    closing: string;
-  } | null;
-};
+import { WorkingTimes } from '../helpers/type';
 
 interface IMuseum {
   name: string;

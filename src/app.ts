@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
-import DBConnection from './db/connection';
+import DBConnection from './db/Connection';
 const app = express();
 const port = process.env.NODE_LOCAL_PORT || 3000;
 
