@@ -18,3 +18,5 @@ app.listen(port, () => {
   console.log(`Express is listening at http://localhost:${port}`);
   DBConnection.getInstance();
 });
+
+export default app;
