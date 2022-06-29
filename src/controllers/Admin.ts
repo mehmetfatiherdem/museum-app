@@ -8,10 +8,10 @@ const loginAdmin = async (req: Request, res: Response) => {
     const admin = await Admin.findOne({ username });
     if (!admin) throw new Error('User not found');
 
-    const match = await bcrypt.compare(password, admin.password_hash);
-    if (!match) throw new Error('wrong password')
-    
-    res.json({message: admin.confirmLogin()})
+    const match = await bcrypt.compare(password, admin.passwordHash);
+    if (!match) throw new Error('wrong password');
+
+    res.json({ message: admin.confirmLogin() });
   } catch (err) {
     res.json({ message: err.message });
   }
