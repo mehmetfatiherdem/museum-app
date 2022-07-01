@@ -19,7 +19,7 @@ const museumSchema = new Schema<IMuseum>(
     builtYear: { type: String, required: true },
     city: { type: String, required: true },
     entranceFee: { type: String, required: true, default: '0' },
-    workingHours: { type: String, required: true },
+    workingHours: { type: Object, required: true },
   },
   {
     timestamps: {
