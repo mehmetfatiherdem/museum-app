@@ -7,7 +7,7 @@
     "dev": "nodemon --config nodemon.json src/app.ts",
     "start": "tsc && node dist/app.js",
     "lint": "eslint . --ext .ts",
-    "test": "mocha --exit --require ts-node/register --watch-extensions ts 'src/tests/**/*.ts'"
+    "test": "NODE_ENV=test mocha --exit --require ts-node/register --watch-extensions ts 'src/tests/**/*.ts'"
   },
   "keywords": [],
   "author": "mehmetfatiherdem <mehmeterdem1024@gmail.com>",

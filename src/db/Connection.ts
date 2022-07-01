@@ -2,8 +2,10 @@ import mongoose from 'mongoose';
 
 class DBConnection {
   private static instance: DBConnection;
-  private static count: number;
-  private readonly url: string = process.env.DB_URL;
+  private readonly url: string =
+    process.env.NODE_ENV == 'test'
+      ? process.env.TEST_DB_URL
+      : process.env.DB_URL;
 
   constructor() {
     mongoose.connect(this.url);
@@ -22,13 +24,25 @@ class DBConnection {
   public static getInstance() {
     if (this.instance == null) {
       this.instance = new DBConnection();
-      this.count = 0;
     }
 
-    this.count++;
-    console.info(`DB connection requested ${this.count} times`);
-
     return this.instance;
+  }
+
+  public static async closeDatabase(drop = false) {
+    if (drop) await mongoose.connection.dropDatabase();
+    await mongoose.disconnect();
+    await mongoose.connection.close();
+  }
+
+  public static async clearDatabase() {
+    const { collections } = mongoose.connection;
+    const results = [];
+
+    for (const key in collections) {
+      results.push(collections[key].deleteMany({}));
+    }
+    await Promise.all(results);
   }
 }
 
