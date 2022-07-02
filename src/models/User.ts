@@ -1,11 +1,13 @@
 import { model, Model, Schema, Types } from 'mongoose';
 import { userLoginReturnVal } from '../helpers/type';
+import bcrypt from 'bcrypt';
+const saltRounds = 10;
 
 interface IUser {
   name: string;
   lastName: string;
   email: string;
-  passwordHash: string;
+  password: string;
   favoriteMuseums: [Types.ObjectId];
 }
 
@@ -19,8 +21,12 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   name: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true },
-  passwordHash: { type: String, required: true },
+  password: { type: String, required: true },
   favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
+});
+userSchema.pre('save', async function () {
+  const passwordHash = await bcrypt.hash(this.password, saltRounds);
+  this.password = passwordHash;
 });
 userSchema.method('serializedForLogin', function serializedForLogin() {
   const info = {
