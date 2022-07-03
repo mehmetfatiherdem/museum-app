@@ -1,23 +1,18 @@
-import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
+import { checkMissingFields } from '../helpers/body';
 import User from '../models/User';
-const saltRounds = 10;
 
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;
-  //TODO: move this to a helper
-  try {
-    if (!name || !lastName || !email || !password)
-      throw new Error('there are missing fields!');
 
-    //TODO: move this to a service or hash pre save
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+  try {
+    checkMissingFields([name, lastName, email, password]);
 
     const user = await User.create({
       name,
       lastName,
       email,
-      passwordHash,
+      password,
       favoriteMuseums: [],
     });
 
