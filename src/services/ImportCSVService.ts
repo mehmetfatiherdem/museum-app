@@ -1,10 +1,24 @@
 import csv from 'csvtojson';
+import fs from 'fs';
+import path from 'path';
 
 class ImportCSVService {
-  constructor(private readonly csvFilePath: string) {}
+  private readonly csvFilePath: string;
+  
+  constructor(csvFilePath: string) {
+    this.csvFilePath = `${__dirname}/${csvFilePath}`;
+  }
 
   public async call() {
-    const jsonArray = await csv().fromFile(this.csvFilePath);
+    csv()
+      .fromStream(
+        fs.createReadStream(this.csvFilePath, {
+          encoding: 'utf-8',
+        })
+      )
+      .subscribe((json) => {
+        console.log(json);
+      });
   }
 }
 
