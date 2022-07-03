@@ -1,10 +1,11 @@
 import csv from 'csvtojson';
 import fs from 'fs';
-import path from 'path';
+import { DAY_NAMES, WorkingTimes } from '../helpers/type';
+import Museum from '../models/Museum';
 
 class ImportCSVService {
   private readonly csvFilePath: string;
-  
+
   constructor(csvFilePath: string) {
     this.csvFilePath = `${__dirname}/${csvFilePath}`;
   }
@@ -16,8 +17,62 @@ class ImportCSVService {
           encoding: 'utf-8',
         })
       )
-      .subscribe((json) => {
-        console.log(json);
+      .subscribe(async (museum) => {
+        const name = museum.Name;
+        const information = museum.Information;
+        const photo = museum.Photo;
+        const builtYear = museum.BuiltYear;
+        const city = museum.City;
+        const entranceFee = museum.EntranceFee;
+        const hours = museum.WorkingHours;
+        const [opening, closing] = hours.split('-');
+        const closedDays = museum.ClosedDays;
+
+        const workingHours: WorkingTimes = {
+          monday: {
+            opening: '',
+            closing: '',
+          },
+          tuesday: {
+            opening: '',
+            closing: '',
+          },
+          wednesday: {
+            opening: '',
+            closing: '',
+          },
+          thursday: {
+            opening: '',
+            closing: '',
+          },
+          friday: {
+            opening: '',
+            closing: '',
+          },
+          saturday: {
+            opening: '',
+            closing: '',
+          },
+          sunday: {
+            opening: '',
+            closing: '',
+          },
+        };
+
+        DAY_NAMES.forEach((day) => {
+          if (day !== closedDays.toLowerCase())
+            workingHours[day] = { opening, closing };
+        });
+
+        await Museum.create({
+          name,
+          information,
+          photo,
+          builtYear,
+          city,
+          entranceFee,
+          workingHours,
+        });
       });
   }
 }
