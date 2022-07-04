@@ -20,7 +20,7 @@ type UserModel = Model<IUser, unknown, IUserMethods>;
 const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   name: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true }, //FIXME must be unique
   password: { type: String, required: true },
   favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
 });
