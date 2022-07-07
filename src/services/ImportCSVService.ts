@@ -2,6 +2,7 @@ import csv from 'csvtojson';
 import fs from 'fs';
 import { DAY_NAMES, WorkingTimes } from '../helpers/type';
 import Museum from '../models/Museum';
+import UploadImageService from './UploadImageService';
 
 class ImportCSVService {
   private readonly csvFilePath: string;
@@ -20,7 +21,7 @@ class ImportCSVService {
       .subscribe(async (museum) => {
         const name = museum.Name;
         const information = museum.Information;
-        const photo = museum.Photo;
+        const photoUrl = museum.Photo;
         const builtYear = museum.BuiltYear;
         const city = museum.City;
         const entranceFee = museum.EntranceFee;
@@ -63,6 +64,10 @@ class ImportCSVService {
           if (day !== closedDays.toLowerCase())
             workingHours[day] = { opening, closing };
         });
+
+        const uploadImage = new UploadImageService(photoUrl);
+        const imageUploaded = await uploadImage.call();
+        const photo = await uploadImage.getImageInfo(imageUploaded.public_id);
 
         await Museum.create({
           name,
