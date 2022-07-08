@@ -24,7 +24,7 @@ class UploadImageService {
       colors: true,
     });
 
-    return result.url;
+    return result.url; //TODO: use secure url maybe
   }
 }
 
