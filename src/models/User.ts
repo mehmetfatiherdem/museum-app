@@ -8,6 +8,7 @@ interface IUser {
   lastName: string;
   email: string;
   password: string;
+  role: string;
   favoriteMuseums: [Types.ObjectId];
 }
 
@@ -22,6 +23,14 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   lastName: { type: String, required: true },
   email: { type: String, required: true }, //FIXME must be unique
   password: { type: String, required: true },
+  role: {
+    type: String,
+    enum: {
+      values: ['normal', 'admin'],
+      message: "user role should be equal to one of these 'normal', 'admin'",
+    },
+    default: 'normal',
+  },
   favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
 });
 userSchema.pre('save', async function () {
