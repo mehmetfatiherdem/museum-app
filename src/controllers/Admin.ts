@@ -1,17 +1,17 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
-import Admin from '../models/Admin';
+import User from '../models/User';
 
 const loginAdmin = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const admin = await Admin.findOne({ username });
+    const admin = await User.findOne({ email });
     if (!admin) throw new Error('User not found');
 
-    const match = await bcrypt.compare(password, admin.passwordHash);
+    const match = await bcrypt.compare(password, admin.password);
     if (!match) throw new Error('wrong password');
 
-    res.json({ message: admin.confirmLogin() });
+    res.json({ message: admin.serializedForLogin() });
   } catch (err) {
     res.json({ message: err.message });
   }
