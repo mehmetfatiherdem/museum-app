@@ -7,10 +7,12 @@ import routes from './routes/Index';
 import cookieParser from 'cookie-parser';
 
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
+  console.log(req.signedCookies._t);
+
   res.send('Hello World!');
 });
 

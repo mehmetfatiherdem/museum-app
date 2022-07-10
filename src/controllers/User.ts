@@ -60,4 +60,9 @@ const signIn = async (req: Request, res: Response) => {
   }
 };
 
-export { signUp, signIn };
+const signOut = async (req: Request, res: Response) => {
+  res.clearCookie('_t');
+  res.json({ message: 'signed out' });
+};
+
+export { signUp, signIn, signOut };
