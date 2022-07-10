@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import mongoose from 'mongoose';
 
 export const DAY_NAMES = [
   'monday',
@@ -31,7 +32,7 @@ export type userLoginReturnVal = {
 };
 
 interface IUser {
-  id: string; // MongoDB _id
+  id: mongoose.Types.ObjectId; // MongoDB _id
   name: string;
   lastName: string;
   email: string;

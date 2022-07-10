@@ -4,6 +4,7 @@ import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
+import Comment from '../models/Comment';
 
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;
@@ -42,7 +43,7 @@ const signIn = async (req: Request, res: Response) => {
 
     const token = await jwt.sign(
       {
-        id: user.id,
+        id: user._id,
         role: user.role,
       },
       process.env.JWT_SECRET,
@@ -109,4 +110,56 @@ const removeFavMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {
   }
 };
 
-export { signUp, signIn, signOut, favMuseum, removeFavMuseum };
+const addComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
+  const { text, museumId } = req.body;
+
+  try {
+    checkMissingFields([text, museumId]);
+    const comment = await Comment.create({
+      text,
+      user: req.user.id,
+      museum: museumId,
+    });
+
+    res.json({
+      message: 'comment successfully created',
+      data: {
+        commentId: comment.id,
+        userId: comment.user,
+        text,
+      },
+    });
+  } catch (err) {
+    res.json({ message: err });
+  }
+};
+
+const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
+  const { id } = req.body;
+
+  const comment = await Comment.findById(id);
+
+  if (!comment) throw new Error('Comment not found');
+
+  if (!comment.user._id.equals(req.user.id)) {
+    return res.status(422).json({
+      message: 'You cannot delete a comment that belongs to other people',
+    });
+  }
+
+  await Comment.findByIdAndRemove(id);
+
+  return res.json({
+    message: 'comment deleted successfully',
+  });
+};
+
+export {
+  signUp,
+  signIn,
+  signOut,
+  favMuseum,
+  removeFavMuseum,
+  addComment,
+  removeComment,
+};

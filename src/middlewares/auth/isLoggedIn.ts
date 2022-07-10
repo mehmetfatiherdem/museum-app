@@ -1,10 +1,12 @@
 import jwt from 'jsonwebtoken';
+import { Response } from 'express';
 import { IGetUserAuthInfoRequest } from '../../helpers/type';
 
-const isLoggedIn = (req: IGetUserAuthInfoRequest, res, next) => {
+const isLoggedIn = (req: IGetUserAuthInfoRequest, res: Response, next) => {
   const { token } = req.cookies;
 
-  if (!token) return res.status(401).json({ message: 'Not authenticated' });
+  if (!token)
+    return res.status(401).json({ message: 'The user is not authenticated' });
 
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);

@@ -5,6 +5,8 @@ import {
   signOut,
   favMuseum,
   removeFavMuseum,
+  addComment,
+  removeComment,
 } from '../controllers/User';
 import isLoggedIn from '../middlewares/auth/isLoggedIn';
 const router = express.Router();
@@ -14,5 +16,7 @@ router.post('/signin', signIn);
 router.get('/signout', signOut);
 router.post('/favorite', isLoggedIn, favMuseum);
 router.post('/remove-favorite', isLoggedIn, removeFavMuseum);
+router.post('/add-comment', isLoggedIn, addComment);
+router.delete('/remove-comment', isLoggedIn, removeComment);
 
 export default router;
