@@ -31,6 +31,7 @@ const loginAdmin = async (req: Request, res: Response) => {
 
     res.cookie('token', token, {
       maxAge: cookieAge,
+      httpOnly: true,
     });
 
     console.log(`cookie ==> ${JSON.stringify(req.cookies)}`);
