@@ -21,9 +21,6 @@ const loginAdmin = async (req: Request, res: Response) => {
     const token = await jwt.sign(
       {
         id: admin.id,
-        name: admin.name,
-        lastName: admin.lastName,
-        email: admin.lastName,
         role: admin.role,
       },
       process.env.JWT_SECRET,
