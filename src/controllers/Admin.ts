@@ -20,6 +20,7 @@ const loginAdmin = async (req: Request, res: Response) => {
 
     const token = await jwt.sign(
       {
+        id: admin.id,
         name: admin.name,
         lastName: admin.lastName,
         email: admin.lastName,
@@ -33,9 +34,6 @@ const loginAdmin = async (req: Request, res: Response) => {
       maxAge: cookieAge,
       httpOnly: true,
     });
-
-    console.log(`cookie ==> ${JSON.stringify(req.cookies)}`);
-    console.log(`token ==> ${token}`);
 
     res.json({ message: admin.serializedForLogin() });
   } catch (err) {

@@ -3,6 +3,7 @@ import { checkMissingFields } from '../helpers/body';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { IGetUserAuthInfoRequest } from '../helpers/type';
 
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;
@@ -41,6 +42,7 @@ const signIn = async (req: Request, res: Response) => {
 
     const token = await jwt.sign(
       {
+        id: user.id,
         name: user.name,
         lastName: user.lastName,
         email: user.lastName,
@@ -55,9 +57,6 @@ const signIn = async (req: Request, res: Response) => {
       httpOnly: true,
     });
 
-    console.log(`sign in cookie ==> ${JSON.stringify(req.cookies)}`);
-    console.log(`sign in token ==> ${token}`);
-
     res.json(user.serializedForLogin());
   } catch (err) {
     res.json({ message: err.message });
@@ -69,4 +68,48 @@ const signOut = async (req: Request, res: Response) => {
   res.json({ message: 'signed out' });
 };
 
-export { signUp, signIn, signOut };
+const favMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {
+  const { museumId } = req.body;
+
+  try {
+    checkMissingFields([museumId]);
+
+    const user = await User.findById(req.user.id);
+    if (!user) throw new Error('User not found');
+
+    if (user.favoriteMuseums.includes(museumId)) {
+      throw new Error('Museum already in favorites');
+    }
+
+    user.favoriteMuseums.push(museumId);
+    await user.save();
+
+    res.json(user.serializedForLogin());
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};
+
+const removeFavMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {
+  const { museumId } = req.body;
+
+  try {
+    checkMissingFields([museumId]);
+
+    const user = await User.findById(req.user.id);
+    if (!user) throw new Error('User not found');
+
+    if (!user.favoriteMuseums.includes(museumId)) {
+      throw new Error('Museum not in favorites');
+    }
+
+    user.favoriteMuseums.splice(user.favoriteMuseums.indexOf(museumId), 1);
+    await user.save();
+
+    res.json(user.serializedForLogin());
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};
+
+export { signUp, signIn, signOut, favMuseum, removeFavMuseum };

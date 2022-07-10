@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 export const DAY_NAMES = [
   'monday',
   'tuesday',
@@ -28,3 +30,14 @@ export type userLoginReturnVal = {
   data: userLoginReturnValData;
 };
 
+interface IUser {
+  id: string; // MongoDB _id
+  name: string;
+  lastName: string;
+  email: string;
+  role: string;
+}
+
+export interface IGetUserAuthInfoRequest extends Request {
+  user: IUser;
+}

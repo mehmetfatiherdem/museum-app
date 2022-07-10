@@ -6,7 +6,7 @@ const isAdmin = (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'Not authenticated' });
 
   const user = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(`isAdmin user ==> ${JSON.stringify(user)}`);
+
   if (user.role === 'admin') {
     return next();
   }

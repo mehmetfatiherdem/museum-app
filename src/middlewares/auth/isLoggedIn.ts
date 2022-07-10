@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
+import { IGetUserAuthInfoRequest } from '../../helpers/type';
 
-const isLoggedIn = (req, res, next) => {
+const isLoggedIn = (req: IGetUserAuthInfoRequest, res, next) => {
   const { token } = req.cookies;
-  console.log(`cookie ==> ${JSON.stringify(req.cookies)}`);
+
   if (!token) return res.status(401).json({ message: 'Not authenticated' });
 
   try {

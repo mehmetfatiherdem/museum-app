@@ -21,7 +21,7 @@ type UserModel = Model<IUser, unknown, IUserMethods>;
 const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   name: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true }, //FIXME must be unique
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: {
     type: String,
@@ -44,6 +44,7 @@ userSchema.method('serializedForLogin', function serializedForLogin() {
       name: this.name,
       lastName: this.lastName,
       email: this.email,
+      favMuseums: this.favoriteMuseums,
     },
   };
   return info;
