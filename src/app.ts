@@ -7,7 +7,7 @@ import routes from './routes/Index';
 import cookieParser from 'cookie-parser';
 
 app.use(express.json());
-app.use(cookieParser(process.env.JWT_SECRET));
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
