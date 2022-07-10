@@ -3,6 +3,10 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import jwt from 'jsonwebtoken';
 
+const testAdminAuth = async (req: Request, res: Response) => {
+  res.json({ message: 'you are admin yaaaaaaaaaaay' });
+};
+
 const loginAdmin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
@@ -19,15 +23,18 @@ const loginAdmin = async (req: Request, res: Response) => {
         name: admin.name,
         lastName: admin.lastName,
         email: admin.lastName,
+        role: admin.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: cookieAge }
     );
 
-    res.cookie('_t', token, {
+    res.cookie('token', token, {
       maxAge: cookieAge,
-      signed: true,
     });
+
+    console.log(`cookie ==> ${JSON.stringify(req.cookies)}`);
+    console.log(`token ==> ${token}`);
 
     res.json({ message: admin.serializedForLogin() });
   } catch (err) {
@@ -35,4 +42,4 @@ const loginAdmin = async (req: Request, res: Response) => {
   }
 };
 
-export { loginAdmin };
+export { loginAdmin, testAdminAuth };

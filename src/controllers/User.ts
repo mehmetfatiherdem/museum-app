@@ -44,15 +44,18 @@ const signIn = async (req: Request, res: Response) => {
         name: user.name,
         lastName: user.lastName,
         email: user.lastName,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: cookieAge }
     );
 
-    res.cookie('_t', token, {
+    res.cookie('token', token, {
       maxAge: rememberMe ? cookieAge * 14 * 1000 : cookieAge * 1000,
-      signed: true,
     });
+
+    console.log(`sign in cookie ==> ${JSON.stringify(req.cookies)}`);
+    console.log(`sign in token ==> ${token}`);
 
     res.json(user.serializedForLogin());
   } catch (err) {
@@ -61,7 +64,7 @@ const signIn = async (req: Request, res: Response) => {
 };
 
 const signOut = async (req: Request, res: Response) => {
-  res.clearCookie('_t');
+  res.clearCookie('token');
   res.json({ message: 'signed out' });
 };
 

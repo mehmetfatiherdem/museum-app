@@ -11,8 +11,7 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-  console.log(req.signedCookies._t);
-
+  console.log(req.cookies);
   res.send('Hello World!');
 });
 
