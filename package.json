@@ -28,9 +28,11 @@
     "bcrypt": "^5.0.1",
     "chai-http": "^4.3.0",
     "cloudinary": "^1.30.0",
+    "cookie-parser": "^1.4.6",
     "csvtojson": "^2.0.10",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.0",
     "ts-node": "^10.8.1"
   }
