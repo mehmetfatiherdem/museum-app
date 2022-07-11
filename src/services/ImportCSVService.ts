@@ -18,6 +18,9 @@ class ImportCSVService {
           encoding: 'utf-8',
         })
       )
+      .on('error', (err) => {
+        console.log(err);
+      })
       .subscribe(async (museum) => {
         const name = museum.Name;
         const information = museum.Information;
@@ -69,7 +72,7 @@ class ImportCSVService {
         const imageUploaded = await uploadImage.call();
         const photo = await uploadImage.getImageInfo(imageUploaded.public_id);
 
-        //FIXME: some lines fail
+        
         await Museum.create({
           name,
           information,
