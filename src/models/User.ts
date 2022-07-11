@@ -10,6 +10,7 @@ interface IUser {
   password: string;
   role: string;
   favoriteMuseums: [Types.ObjectId];
+  comments: [Types.ObjectId];
 }
 
 interface IUserMethods {
@@ -19,10 +20,10 @@ interface IUserMethods {
 type UserModel = Model<IUser, unknown, IUserMethods>;
 
 const userSchema = new Schema<IUser, UserModel, IUserMethods>({
-  name: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  name: { type: String, required: [true, 'Name is required'] },
+  lastName: { type: String, required: [true, 'LastName is required'] },
+  email: { type: String, required: [true, 'Email is required'], unique: true },
+  password: { type: String, required: [true, 'Password is required'] },
   role: {
     type: String,
     enum: {
@@ -32,6 +33,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     default: 'normal',
   },
   favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', default: [] }],
 });
 userSchema.pre('save', async function () {
   const passwordHash = await bcrypt.hash(this.password, saltRounds);

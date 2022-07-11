@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
 import Comment from '../models/Comment';
+import Museum from '../models/Museum';
 
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;
@@ -37,7 +38,8 @@ const signIn = async (req: Request, res: Response) => {
     if (!user) throw new Error('No registered account found with this email');
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) throw new Error('wrong password');
+
+    console.log(match);
 
     const cookieAge = 24 * 3600; // Default cookie expiry time is 1 day
 
@@ -82,7 +84,12 @@ const favMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {
     user.favoriteMuseums.push(museumId);
     await user.save();
 
-    res.json(user.serializedForLogin());
+    res.json({
+      message: 'Museum added to favorites',
+      data: {
+        museumId,
+      },
+    });
   } catch (err) {
     res.json({ message: err.message });
   }
@@ -104,14 +111,35 @@ const removeFavMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {
     user.favoriteMuseums.splice(user.favoriteMuseums.indexOf(museumId), 1);
     await user.save();
 
-    res.json(user.serializedForLogin());
+    res.json({ message: 'Museum removed from favorites', data: { museumId } });
   } catch (err) {
     res.json({ message: err.message });
   }
 };
 
+const getFavMuseums = async (req: IGetUserAuthInfoRequest, res: Response) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) throw new Error('User not found');
+
+  res.json({
+    message: 'favorite museums retrieved successfully',
+    data: {
+      museums: user.favoriteMuseums,
+    },
+  });
+};
+
 const addComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
   const { text, museumId } = req.body;
+
+  const museum = await Museum.findById(museumId);
+
+  if (!museum) throw new Error('Museum not found');
+
+  const user = await User.findById(req.user.id);
+
+  if (!user) throw new Error('User not found');
 
   try {
     checkMissingFields([text, museumId]);
@@ -120,6 +148,14 @@ const addComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
       user: req.user.id,
       museum: museumId,
     });
+
+    museum.comments.push(comment._id);
+
+    await museum.save();
+
+    user.comments.push(comment._id);
+
+    await user.save();
 
     res.json({
       message: 'comment successfully created',
@@ -162,4 +198,5 @@ export {
   removeFavMuseum,
   addComment,
   removeComment,
+  getFavMuseums,
 };
