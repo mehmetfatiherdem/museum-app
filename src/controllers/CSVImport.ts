@@ -4,7 +4,7 @@ import ImportCSVService from '../services/ImportCSVService';
 const importCSV = async (req: Request, res: Response) => {
   try {
     const importCSV = new ImportCSVService(
-      '../assets/csv/museum.csv'
+      '../assets/csv/museum-part1.csv'
     );
     await importCSV.call();
     res.json({ message: 'done' });

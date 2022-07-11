@@ -69,6 +69,7 @@ class ImportCSVService {
         const imageUploaded = await uploadImage.call();
         const photo = await uploadImage.getImageInfo(imageUploaded.public_id);
 
+        //FIXME: some lines fail
         await Museum.create({
           name,
           information,
