@@ -3,10 +3,6 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import jwt from 'jsonwebtoken';
 
-const testAdminAuth = async (req: Request, res: Response) => {
-  res.json({ message: 'you are admin yaaaaaaaaaaay' });
-};
-
 const loginAdmin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
@@ -38,4 +34,4 @@ const loginAdmin = async (req: Request, res: Response) => {
   }
 };
 
-export { loginAdmin, testAdminAuth };
+export { loginAdmin };
