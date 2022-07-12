@@ -3,9 +3,6 @@ import { checkMissingFields } from '../helpers/body';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { IGetUserAuthInfoRequest } from '../helpers/type';
-import Comment from '../models/Comment';
-import Museum from '../models/Museum';
 
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;

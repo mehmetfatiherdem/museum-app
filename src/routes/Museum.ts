@@ -10,11 +10,11 @@ import {
 import isLoggedIn from '../middlewares/auth/isLoggedIn';
 const router = express.Router();
 
-router.get('/museums', getMuseums);
-router.post('/favorite', isLoggedIn, favMuseum);
+router.get('/', getMuseums);
+router.post('/add-favorite', isLoggedIn, favMuseum);
 router.post('/remove-favorite', isLoggedIn, removeFavMuseum);
 router.get('/fav-museums', isLoggedIn, getFavMuseums);
-router.get('/museums/:city', filterMuseumsByCity);
-router.get('/museum/:id', getMuseum);
+router.get('/:id', getMuseum);
+router.get('/:city', filterMuseumsByCity);
 
 export default router;

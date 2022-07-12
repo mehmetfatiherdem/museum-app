@@ -2,15 +2,13 @@ import express from 'express';
 import {
   addComment,
   getComment,
-  getMuseumComments,
   removeComment,
 } from '../controllers/Comment';
 import isLoggedIn from '../middlewares/auth/isLoggedIn';
 const router = express.Router();
 
-router.post('/add-comment', isLoggedIn, addComment);
-router.delete('/remove-comment', isLoggedIn, removeComment);
-router.get('/comment/:id', getComment);
-router.get('/museum/:museumId/comments', getMuseumComments);
+router.post('/add', isLoggedIn, addComment);
+router.delete('/remove', isLoggedIn, removeComment);
+router.get('/:id', getComment);
 
 export default router;

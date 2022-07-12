@@ -1,0 +1,84 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Museum App",
+    "description": "Museum App API",
+    "contact": {
+      "name": "Mehmet Fatih Erdem",
+      "url": "https://github.com/mehmetfatiherdem",
+      "email": "mehmeterdem1024@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Localhost"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Admin",
+      "description": "Admin endpoints"
+    },
+    {
+      "name": "Comment",
+      "description": "Comment endpoints"
+    },
+    {
+      "name": "CSV",
+      "description": "CSV import endpoints"
+    },
+    {
+      "name": "Museum",
+      "description": "Museum endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User endpoints"
+    }
+  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/api/admin/login": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Login",
+        "description": "Login to admin panel",
+        "parameters": [
+          {
+            "email": "body",
+            "in": "body",
+            "required": true
+          },
+          {
+            "password": "body",
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "id": {
+      "properties": {
+        "uuid": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

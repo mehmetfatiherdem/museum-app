@@ -6,10 +6,10 @@ import csvRoutes from './CSVImport';
 import museumRoutes from './Museum';
 import commentRoutes from './Comment';
 
-router.use('/admin', adminRoutes);
-router.use('/user', userRoutes);
+router.use('/admins', adminRoutes);
+router.use('/users', userRoutes);
 router.use('/csv', csvRoutes);
-router.use('/museum', museumRoutes);
-router.use('/comment', commentRoutes);
+router.use('/museums', museumRoutes);
+router.use('/comments', commentRoutes);
 
 export default router;

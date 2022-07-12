@@ -85,18 +85,4 @@ const getComment = async (req: Request, res: Response) => {
   });
 };
 
-const getMuseumComments = async (req: Request, res: Response) => {
-  const { museumId } = req.params;
-  console.log(museumId);
-  const museum = await Museum.findById(museumId);
-  if (!museum)
-    throw new Error(`Museum with the ID of ${museumId} doesn't exist`);
-
-  res.json({
-    data: {
-      comments: museum.comments,
-    },
-  });
-};
-
-export { addComment, removeComment, getMuseumComments, getComment };
+export { addComment, removeComment, getComment };
