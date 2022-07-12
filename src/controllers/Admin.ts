@@ -10,7 +10,8 @@ const loginAdmin = async (req: Request, res: Response) => {
     if (!admin) throw new Error('User not found');
 
     const match = await bcrypt.compare(password, admin.password);
-    if (!match) throw new Error('wrong password');
+   
+    if (!match) throw new Error('Wrong password');
 
     const cookieAge = 24 * 3600; // Default cookie expiry time is 1 day
 

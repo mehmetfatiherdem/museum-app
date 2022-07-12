@@ -39,13 +39,13 @@ const signIn = async (req: Request, res: Response) => {
 
     const match = await bcrypt.compare(password, user.password);
 
-    console.log(match);
+    if (!match) throw new Error('Wrong password');
 
     const cookieAge = 24 * 3600; // Default cookie expiry time is 1 day
 
     const token = await jwt.sign(
       {
-        id: user._id,
+        id: user.id,
         role: user.role,
       },
       process.env.JWT_SECRET,
