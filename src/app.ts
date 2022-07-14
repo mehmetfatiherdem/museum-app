@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import DBConnection from './db/Connection';
 const app = express();
-const port = process.env.NODE_LOCAL_PORT || 3000;
+const port = process.env.PORT || 3000;
 import routes from './routes/Index';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
