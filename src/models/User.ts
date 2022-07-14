@@ -35,10 +35,12 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', default: [] }],
 });
-userSchema.pre('save', async function () {
+userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     const passwordHash = await bcrypt.hash(this.password, saltRounds);
     this.password = passwordHash;
+  } else {
+    next();
   }
 });
 userSchema.method('serializedForLogin', function serializedForLogin() {
