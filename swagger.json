@@ -45,6 +45,152 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
+    "/api/admins/login": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Login admin",
+        "description": "Login admin",
+        "operationId": "loginAdmin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "require": true,
+                    "example": "barney.stinson@domain.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true,
+                    "example": "secretPassword1337!"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login admin"
+          }
+        }
+      }
+    },
+
+    "/api/admins/signout": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Logout admin",
+        "description": "Logout admin",
+        "operationId": "logoutAdmin",
+        "responses": {
+          "200": {
+            "description": "Logout admin"
+          }
+        }
+      }
+    },
+
+    "/api/users/signup": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Signup user",
+        "description": "Signup user",
+        "operationId": "signupUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true,
+                    "example": "Barney"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "required": true,
+                    "example": "Stinson"
+                  },
+                  "email": {
+                    "type": "string",
+                    "required": true,
+                    "example": "barney.stinson@domain.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true,
+                    "example": "secretPassword1337!"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Signup user"
+          }
+        }
+      }
+    },
+
+    "/api/users/signin": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Signin user",
+        "description": "Signin user",
+        "operationId": "signinUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true,
+                    "example": "barney.stinson@domain.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true,
+                    "example": "secretPassword1337!"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Signin user"
+          }
+        }
+      }
+    },
+
+    "/api/users/signout": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Logout user",
+        "description": "Logout user",
+        "operationId": "logoutUser",
+        "responses": {
+          "200": {
+            "description": "Logout user"
+          }
+        }
+      }
+    },
+
     "/api/museums": {
       "get": {
         "tags": ["Museum"],
@@ -54,6 +200,27 @@
         "responses": {
           "200": {
             "description": "A list of museums"
+          }
+        }
+      }
+    },
+    "/api/museums/{id}": {
+      "get": {
+        "tags": ["Museum"],
+        "summary": "Get a museum by id",
+        "description": "Get a museum by id",
+        "operationId": "getMuseumById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Museum id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A museum"
           }
         }
       }
