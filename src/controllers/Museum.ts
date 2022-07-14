@@ -18,7 +18,7 @@ const getMuseum = async (req: Request, res: Response) => {
 };
 
 const filterMuseumsByCity = async (req: Request, res: Response) => {
-  const { city } = req.params;
+  const { city } = req.query;
   const museums = await Museum.find({ city });
   if (museums.length === 0) throw new Error('There are no museums in the DB');
   res.json({

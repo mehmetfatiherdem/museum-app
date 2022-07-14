@@ -14,7 +14,7 @@ router.get('/', getMuseums);
 router.post('/add-favorite', isLoggedIn, favMuseum);
 router.post('/remove-favorite', isLoggedIn, removeFavMuseum);
 router.get('/fav-museums', isLoggedIn, getFavMuseums);
+router.get('/filter', filterMuseumsByCity);
 router.get('/:id', getMuseum);
-router.get('/:city', filterMuseumsByCity);
 
 export default router;
