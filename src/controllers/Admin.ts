@@ -6,8 +6,8 @@ import jwt from 'jsonwebtoken';
 const loginAdmin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const admin = await User.findOne({ email });
-    if (!admin) throw new Error('User not found');
+    const admin = await User.findOne({ email, isAdmin: true });
+    if (!admin) throw new Error('Admin not found');
 
     const match = await bcrypt.compare(password, admin.password);
    
