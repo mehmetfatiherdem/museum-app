@@ -18,6 +18,7 @@ app.use('/api', routes);
 
 app.listen(port, () => {
   console.log(`Express is listening at http://localhost:${port}`);
+
   DBConnection.getInstance();
 });
 
