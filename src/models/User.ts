@@ -36,8 +36,10 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', default: [] }],
 });
 userSchema.pre('save', async function () {
-  const passwordHash = await bcrypt.hash(this.password, saltRounds);
-  this.password = passwordHash;
+  if (this.isModified('password')) {
+    const passwordHash = await bcrypt.hash(this.password, saltRounds);
+    this.password = passwordHash;
+  }
 });
 userSchema.method('serializedForLogin', function serializedForLogin() {
   const info = {
