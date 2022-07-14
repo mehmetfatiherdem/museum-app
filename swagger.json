@@ -191,6 +191,104 @@
       }
     },
 
+    "/api/comments/add": {
+      "post": {
+        "tags": ["Comment"],
+        "summary": "Add comment",
+        "description": "Add comment",
+        "operationId": "addComment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "museumId": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "text": {
+                    "type": "string",
+                    "required": true,
+                    "example": "This is a comment"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "authCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Add comment"
+          }
+        }
+      }
+    },
+
+    "/api/comments/remove": {
+      "delete": {
+        "tags": ["Comment"],
+        "summary": "Remove comment",
+        "description": "Remove comment",
+        "operationId": "removeComment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "commentId": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "authCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Remove comment"
+          }
+        }
+      }
+    },
+
+    "/api/comments/{id}": {
+      "get": {
+        "tags": ["Comment"],
+        "summary": "Get comment",
+        "description": "Get comment",
+        "operationId": "getComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Comment id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get comment"
+          }
+        }
+      }
+    },
+
     "/api/museums": {
       "get": {
         "tags": ["Museum"],
@@ -204,6 +302,119 @@
         }
       }
     },
+
+    "/api/museums/add-favorite": {
+      "post": {
+        "tags": ["Museum"],
+        "summary": "Add favorite",
+        "description": "Add favorite",
+        "operationId": "addFavorite",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "museumId": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "authCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Add favorite"
+          }
+        }
+      }
+    },
+
+    "/api/museums/remove-favorite": {
+      "post": {
+        "tags": ["Museum"],
+        "summary": "Remove favorite",
+        "description": "Remove favorite",
+        "operationId": "removeFavorite",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "museumId": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "authCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Remove favorite"
+          }
+        }
+      }
+    },
+
+    "/api/museums/fav-museums": {
+      "get": {
+        "tags": ["Museum"],
+        "summary": "Get favorite museums",
+        "description": "Get favorite museums",
+        "operationId": "getFavMuseums",
+        "security": [
+          {
+            "authCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of museums"
+          }
+        }
+      }
+    },
+
+    "/api/museums/filter": {
+      "get": {
+        "tags": ["Museum"],
+        "summary": "Filter museums",
+        "description": "Filter museums",
+        "operationId": "filterMuseums",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "description": "city",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of museums"
+          }
+        }
+      }
+    },
+
     "/api/museums/{id}": {
       "get": {
         "tags": ["Museum"],
