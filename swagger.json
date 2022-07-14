@@ -14,6 +14,10 @@
     {
       "url": "http://localhost:3000",
       "description": "Localhost"
+    },
+    {
+      "url": "https://ronchon-gerard-51245.herokuapp.com/",
+      "description": "Heroku"
     }
   ],
   "tags": [
@@ -41,32 +45,15 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/api/admin/login": {
-      "post": {
-        "tags": ["Admin"],
-        "summary": "Login",
-        "description": "Login to admin panel",
-        "parameters": [
-          {
-            "email": "body",
-            "in": "body",
-            "required": true
-          },
-          {
-            "password": "body",
-            "in": "body",
-            "required": true
-          }
-        ],
+    "/api/museums": {
+      "get": {
+        "tags": ["Museum"],
+        "summary": "Get all museums",
+        "description": "Get all museums",
+        "operationId": "getMuseums",
         "responses": {
           "200": {
-            "description": "Success"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
+            "description": "A list of museums"
           }
         }
       }
