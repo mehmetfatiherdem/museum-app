@@ -35,14 +35,30 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', default: [] }],
 });
+
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
+    // check requirements first
+    const passwordRules =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRules.test(this.password)) {
+      throw new Error(
+        'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character'
+      );
+    }
     const passwordHash = await bcrypt.hash(this.password, saltRounds);
     this.password = passwordHash;
   } else {
     next();
   }
 });
+
+userSchema.path('email').validate(function (email) {
+  // eslint-disable-next-line no-useless-escape
+  const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+  return emailRegex.test(email);
+}, 'Invalid email');
+
 userSchema.method('serializedForLogin', function serializedForLogin() {
   const info = {
     message: `Welcome to the museum app ${this.name}`,
