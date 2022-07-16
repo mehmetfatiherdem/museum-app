@@ -15,13 +15,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.set('view engine', 'ejs');
 
-app.get('/', function (req, res) {
+app.get('/google-sign', function (req, res) {
   res.render(`${__dirname}/../src/views/auth.ejs`);
 });
 
 app.use('/api', routes);
 
-// app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => {
   console.log(`Express is listening at http://localhost:${port}`);

@@ -1,17 +1,20 @@
 import express from 'express';
-import passport from 'passport';
+import passport from '../auth/passport';
 import jwt from 'jsonwebtoken';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
 const router = express.Router();
 
 router.get(
-  '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'openid', 'email'] })
+  '/google',
+  passport.authenticate('google', {
+    session: false,
+    scope: ['profile', 'email', 'openid'],
+  })
 );
 
 router.get(
-  '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  '/google/callback',
+  passport.authenticate('google', { session: false }),
   function (req: IGetUserAuthInfoRequest, res) {
     const { id } = req.user;
 

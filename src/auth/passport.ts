@@ -7,7 +7,10 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/api/auth/google/callback',
+      callbackURL:
+        process.env.NODE_ENV == 'production'
+          ? process.env.GOOGLE_AUTH_CALLBACK_URL
+          : 'http://localhost:3000/api/auth/google/callback',
     },
     async function (accessToken, refreshToken, profile, cb) {
       const user = await User.findOne({ googleId: profile.id });
@@ -33,3 +36,5 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((user, cb) => {
   cb(null, user);
 });
+
+export default passport;
