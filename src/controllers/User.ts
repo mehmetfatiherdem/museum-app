@@ -3,6 +3,7 @@ import { checkMissingFields } from '../helpers/body';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { IGetUserAuthInfoRequest } from '../helpers/type';
 
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;
@@ -66,9 +67,4 @@ const signOut = async (req: Request, res: Response) => {
 };
 
 
-
-export {
-  signUp,
-  signIn,
-  signOut,
-};
+export { signUp, signIn, signOut };

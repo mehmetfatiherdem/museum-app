@@ -9,6 +9,8 @@ interface IUser {
   email: string;
   password: string;
   role: string;
+  provider: string;
+  providerId: string;
   favoriteMuseums: [Types.ObjectId];
   comments: [Types.ObjectId];
 }
@@ -31,6 +33,14 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
       message: "user role should be equal to one of these 'normal', 'admin'",
     },
     default: 'normal',
+  },
+  provider: {
+    type: String,
+    default: 'local',
+  },
+  providerId: {
+    type: String,
+    default: '',
   },
   favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', default: [] }],
