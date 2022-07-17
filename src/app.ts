@@ -21,7 +21,7 @@ app.get('/google-sign', function (req, res) {
 
 app.use('/api', routes);
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+ app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => {
   console.log(`Express is listening at http://localhost:${port}`);
