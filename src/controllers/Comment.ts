@@ -59,6 +59,11 @@ const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
         if (!comment)
           throw new Error(`Comment with the ID of ${commentId} doesn't exist`);
 
+        console.log(`comment user = ${comment.user} user = ${req.user.id}`);
+
+        if (!comment.user.equals(req.user.id))
+          throw new Error('You cannot delete a comment you did not create');
+
         const museum = await Museum.findById(comment.museum);
         if (!museum)
           throw new Error(
@@ -107,4 +112,26 @@ const getComment = async (req: Request, res: Response) => {
   });
 };
 
-export { addComment, removeComment, getComment };
+const updateComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
+  const { commentId, text } = req.body;
+
+  const comment = await Comment.findById(commentId);
+  if (!comment)
+    throw new Error(`Comment with the ID of ${commentId} doesn't exist`);
+  if (!comment.user.equals(req.user.id))
+    throw new Error('You cannot update a comment you did not create');
+
+  comment.text = text;
+
+  await comment.save();
+
+  res.json({
+    message: 'comment successfully updated',
+    data: {
+      commentId: comment.id,
+      text,
+    },
+  });
+};
+
+export { addComment, removeComment, getComment, updateComment };

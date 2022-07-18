@@ -303,6 +303,46 @@
       }
     },
 
+    "/api/comments/update": {
+      "patch": {
+        "tags": ["Comment"],
+        "summary": "Update comment",
+        "description": "Update comment",
+        "operationId": "updateComment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "commentId": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "text": {
+                    "type": "string",
+                    "required": true,
+                    "example": "This is a comment"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "authCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update comment"
+          }
+        }
+      }
+    },
+
     "/api/comments/{commentId}": {
       "get": {
         "tags": ["Comment"],
