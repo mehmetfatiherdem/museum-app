@@ -1,7 +1,4 @@
-Museum App API
-
 <!-- ABOUT THE PROJECT -->
-
 ## About The Project
 
 Museum App API is a RESTful API that includes the backend logic of the application. This project came to the life while I was talking to my friend about his final project at a BootCamp. He told me that he could not find a good API for the museums in Turkey and I thought maybe I can build one. It is built on top of the [TypeScript](https://www.typescriptlang.org/), the [Express.js](https://expressjs.com/) framework, the [MongoDB](https://www.mongodb.com/) database.
