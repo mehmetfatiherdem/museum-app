@@ -1,3 +1,7 @@
+# Museum App API
+
+CRUD application for the museums in Turkey.
+
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
