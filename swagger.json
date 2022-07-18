@@ -191,15 +191,35 @@
       }
     },
 
-    "/api/users/me": {
+    "/api/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all users",
+        "description": "Get all users",
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "Get all users"
+          }
+        }
+      }
+    },
+
+    "/api/users/{id}": {
       "get": {
         "tags": ["User"],
         "summary": "Get user",
         "description": "Get user",
         "operationId": "getUser",
-        "security": {
-          "bearerAuth": {}
-        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "example": "62d06853e1dede40af51718e"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get user"
@@ -283,7 +303,7 @@
       }
     },
 
-    "/api/comments/{id}": {
+    "/api/comments/{commentId}": {
       "get": {
         "tags": ["Comment"],
         "summary": "Get comment",
@@ -291,11 +311,11 @@
         "operationId": "getComment",
         "parameters": [
           {
-            "name": "id",
+            "name": "commentId",
             "in": "path",
-            "description": "Comment id",
+            "description": "Comment ID",
             "required": true,
-            "type": "string"
+            "example": "62d561f47233089392f88c81"
           }
         ],
         "responses": {
@@ -449,6 +469,29 @@
         "responses": {
           "200": {
             "description": "A museum"
+          }
+        }
+      }
+    },
+
+    "/api/museums/{id}/comments": {
+      "get": {
+        "tags": ["Museum"],
+        "summary": "Get comments",
+        "description": "Get comments",
+        "operationId": "getComments",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Museum id",
+            "required": true,
+            "example": "62cc0f159effca7605343bec"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of comments"
           }
         }
       }

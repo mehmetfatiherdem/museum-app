@@ -3,7 +3,6 @@ import { checkMissingFields } from '../helpers/body';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { IGetUserAuthInfoRequest } from '../helpers/type';
 
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;
@@ -66,5 +65,20 @@ const signOut = async (req: Request, res: Response) => {
   res.json({ message: 'signed out' });
 };
 
+const getUsers = async (req: Request, res: Response) => {
+  const users = await User.find().where('role').equals('normal');
 
-export { signUp, signIn, signOut };
+  res.json(users.map((user) => user.serializedForUserEndpoints()));
+};
+
+const getUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  if (!user) throw new Error('User not found');
+
+  res.json(user.serializedForUserEndpoints());
+};
+
+export { signUp, signIn, signOut, getUsers, getUser };

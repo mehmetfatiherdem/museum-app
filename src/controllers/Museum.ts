@@ -90,6 +90,21 @@ const getFavMuseums = async (req: IGetUserAuthInfoRequest, res: Response) => {
   });
 };
 
+const getMuseumComments = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const museum = await Museum.findById(id);
+  if (!museum) throw new Error(`Museum with the ID of ${id} doesn't exist`);
+
+  await museum.populate('comments');
+
+  res.json({
+    data: {
+      comments: museum.comments,
+    },
+  });
+};
+
+
 export {
   getMuseums,
   getMuseum,
@@ -97,4 +112,5 @@ export {
   favMuseum,
   removeFavMuseum,
   getFavMuseums,
+  getMuseumComments,
 };

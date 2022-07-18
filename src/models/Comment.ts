@@ -1,4 +1,5 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema, Types, PopulatedDoc } from 'mongoose';
+import User from './User';
 
 interface IComment {
   text: string;
@@ -13,8 +14,8 @@ const commentSchema = new Schema<IComment>(
       required: [true, 'You cannot leave comment text empty'],
       maxlength: [140, 'Comment length cannot be more than 140 characters'],
     },
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
-    museum: { type: Schema.Types.ObjectId, ref: 'Museum' },
+    user: { type: Schema.Types.ObjectId, ref: 'user' },
+    museum: { type: Schema.Types.ObjectId, ref: 'museum' },
   },
   { timestamps: true }
 );

@@ -1,7 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 import { WorkingTimes } from '../helpers/type';
 
-interface IMuseum {
+export interface IMuseum {
   name: string;
   information: string;
   photo: string;
@@ -21,7 +21,7 @@ const museumSchema = new Schema<IMuseum>(
     city: { type: String, required: true },
     entranceFee: { type: String, required: true, default: '0' },
     workingHours: { type: Object, required: true },
-    comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', default: [] }],
+    comments: [{ type: Schema.Types.ObjectId, ref: 'comment', default: [] }],
   },
   {
     timestamps: {

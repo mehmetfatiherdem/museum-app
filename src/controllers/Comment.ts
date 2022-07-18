@@ -1,9 +1,10 @@
 import { checkMissingFields } from '../helpers/body';
 import { IGetUserAuthInfoRequest } from '../helpers/type';
 import Comment from '../models/Comment';
-import Museum from '../models/Museum';
-import User from '../models/User';
+import Museum, { IMuseum } from '../models/Museum';
+import User, { IUser } from '../models/User';
 import { Response, Request } from 'express';
+import isType from '../helpers/typeGuard';
 
 const addComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
   const { text, museumId } = req.body;
@@ -46,22 +47,43 @@ const addComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
 };
 
 const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
-  const { id } = req.body;
+  const { commentId } = req.body;
 
-  const comment = await Comment.findById(id);
+  let session = null;
 
-  if (!comment) throw new Error('Comment not found');
+  Comment.startSession()
+    .then((_session) => {
+      session = _session;
+      return session.withTransaction(async () => {
+        const comment = await Comment.findById(commentId);
+        if (!comment)
+          throw new Error(`Comment with the ID of ${commentId} doesn't exist`);
 
-  if (!comment.user._id.equals(req.user.id)) {
-    return res.status(422).json({
-      message: 'You cannot delete a comment that belongs to other people',
-    });
-  }
+        const museum = await Museum.findById(comment.museum);
+        if (!museum)
+          throw new Error(
+            `Museum with the ID of ${comment.museum} doesn't exist`
+          );
 
-  await Comment.findByIdAndRemove(id);
+        const user = await User.findById(comment.user);
+        if (!user)
+          throw new Error(`User with the ID of ${comment.user} doesn't exist`);
+
+        museum.comments.splice(museum.comments.indexOf(commentId), 1);
+        user.comments.splice(user.comments.indexOf(commentId), 1);
+
+        await museum.save();
+        await user.save();
+        await comment.remove();
+
+        return;
+      });
+    })
+    .then(() => Comment.countDocuments())
+    .then(() => session.endSession());
 
   return res.json({
-    message: 'Comment successfully deleted',
+    message: 'Comments successfully deleted',
   });
 };
 
@@ -79,8 +101,8 @@ const getComment = async (req: Request, res: Response) => {
     data: {
       commentId: comment.id,
       text: comment.text,
-      user: comment.user,
-      museum: comment.museum,
+      user: isType<IUser>(comment.user) ? comment.user.name : '',
+      museum: isType<IMuseum>(comment.museum) ? comment.museum.name : '',
     },
   });
 };

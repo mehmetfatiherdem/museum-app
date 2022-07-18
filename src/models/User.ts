@@ -1,9 +1,9 @@
 import { model, Model, Schema, Types } from 'mongoose';
-import { userLoginReturnVal } from '../helpers/type';
+import { userEndpointReturnVal, userLoginReturnVal } from '../helpers/type';
 import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
-interface IUser {
+export interface IUser {
   name: string;
   lastName: string;
   email: string;
@@ -17,6 +17,7 @@ interface IUser {
 
 interface IUserMethods {
   serializedForLogin(): userLoginReturnVal;
+  serializedForUserEndpoints(): userEndpointReturnVal;
 }
 
 type UserModel = Model<IUser, unknown, IUserMethods>;
@@ -42,8 +43,8 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     type: String,
     default: '',
   },
-  favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'Museum' }],
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment', default: [] }],
+  favoriteMuseums: [{ type: Schema.Types.ObjectId, ref: 'museum' }],
+  comments: [{ type: Schema.Types.ObjectId, ref: 'comment', default: [] }],
 });
 
 userSchema.pre('save', async function (next) {
@@ -81,6 +82,24 @@ userSchema.method('serializedForLogin', function serializedForLogin() {
   };
   return info;
 });
+
+userSchema.method(
+  'serializedForUserEndpoints',
+  function serializedForUserEndpoints() {
+    const info = {
+      message: `User info for ${this.name} retrieved successfully`,
+      data: {
+        name: this.name,
+        lastName: this.lastName,
+        email: this.email,
+        role: this.role,
+        favMuseums: this.favoriteMuseums,
+        comments: this.comments,
+      },
+    };
+    return info;
+  }
+);
 
 const User = model<IUser, UserModel>(process.env.USER_MODEL_NAME, userSchema);
 

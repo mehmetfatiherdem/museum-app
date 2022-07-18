@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 export const DAY_NAMES = [
   'monday',
@@ -42,3 +42,17 @@ interface IUser {
 export interface IGetUserAuthInfoRequest extends Request {
   user: IUser;
 }
+
+type userEndpointReturnValData = {
+  name: string;
+  lastName: string;
+  email: string;
+  role: string;
+  favMuseums: [Types.ObjectId];
+  comments: [Types.ObjectId];
+};
+
+export type userEndpointReturnVal = {
+  message: string;
+  data: userEndpointReturnValData;
+};
