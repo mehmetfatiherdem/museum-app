@@ -72,9 +72,9 @@ const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
         museum.comments.splice(museum.comments.indexOf(commentId), 1);
         user.comments.splice(user.comments.indexOf(commentId), 1);
 
-        await museum.save();
-        await user.save();
-        await comment.remove();
+        await museum.save({ session });
+        await user.save({ session });
+        await comment.remove({ session });
 
         return;
       });
