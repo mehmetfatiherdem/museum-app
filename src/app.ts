@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from '../swagger.json';
 import cors from 'cors';
 import path from 'path';
+import MailCronService from './services/MailCronService';
 
 app.use(express.json());
 app.use(cookieParser());
@@ -29,6 +30,9 @@ app.listen(port, () => {
   console.log(`Express is listening at http://localhost:${port}`);
 
   DBConnection.getInstance();
+
+  const mailCronService = new MailCronService('0 0 * * 0');
+  mailCronService.call();
 });
 
 export default app;

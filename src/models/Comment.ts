@@ -1,5 +1,4 @@
 import { model, Schema, Types, PopulatedDoc } from 'mongoose';
-import User from './User';
 
 interface IComment {
   text: string;
