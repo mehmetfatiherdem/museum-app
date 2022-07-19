@@ -9,7 +9,6 @@ import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from '../swagger.json';
 import cors from 'cors';
 import path from 'path';
-import SendMailService from './services/SendMailService';
 import MailCronService from './services/MailCronService';
 
 app.use(express.json());
@@ -21,20 +20,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.get('/google-sign', function (req, res) {
   res.render(`auth.ejs`);
-});
-
-app.post('/email', async (req, res) => {
-  const sendEmail = new SendMailService(
-    'gmail',
-    'mehmeterdem1024@gmail.com',
-    'test',
-    'helloo mehmet',
-    ''
-  );
-
-  await sendEmail.call();
-
-  res.json({ message: 'mail sent' });
 });
 
 app.use('/api', routes);
