@@ -68,7 +68,7 @@ const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
           });
 
         if (!comment.user.equals(req.user.id))
-          return res.status(422).json({
+          return res.status(401).json({
             message: 'You cannot delete a comment you did not create',
           });
 
@@ -133,7 +133,7 @@ const updateComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
       message: 'No comment found with the specified ID',
     });
   if (!comment.user.equals(req.user.id))
-    return res.status(422).json({
+    return res.status(401).json({
       message: 'You cannot update a comment you did not create',
     });
 
