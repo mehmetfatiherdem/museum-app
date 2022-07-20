@@ -31,7 +31,7 @@ app.listen(port, () => {
 
   DBConnection.getInstance();
 
-  const mailCronService = new MailCronService('0 0 * * 0');
+  const mailCronService = new MailCronService('0 0 * * THU');
   mailCronService.call();
 });
 
