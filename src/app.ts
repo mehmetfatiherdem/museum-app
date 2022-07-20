@@ -8,9 +8,9 @@ import cookieParser from 'cookie-parser';
 
 import session from 'express-session';
 import connectRedis from 'connect-redis';
-import redis from 'redis';
+import Redis from 'ioredis';
 const RedisStore = connectRedis(session);
-const redisClient = redis.createClient({ host: 'localhost', port: 6379 });
+const redisClient = new Redis();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
   console.log(`test session ===> ${JSON.stringify(req.session)}`);
-  console.log(`test session user ===> ${JSON.stringify(req.session.user)}`);
+  // console.log(`test session user ===> ${JSON.stringify(req.session.user)}`);
   res.send('Hello World!');
 });
 

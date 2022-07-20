@@ -3,7 +3,7 @@ import { userLoginReturnVal } from '../helpers/type';
 import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
-interface IUser {
+export interface IUser {
   name: string;
   lastName: string;
   email: string;
