@@ -1,4 +1,4 @@
-import { model, Schema, Types, PopulatedDoc } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 
 interface IComment {
   text: string;

@@ -7,57 +7,58 @@ import jwt from 'jsonwebtoken';
 const signUp = async (req: Request, res: Response) => {
   const { name, lastName, email, password } = req.body;
 
-  try {
-    checkMissingFields([name, lastName, email, password]);
+  if (checkMissingFields([name, lastName, email, password]))
+    return res
+      .status(422)
+      .json({ message: 'There are missing fields in the body!' });
 
-    const user = await User.create({
-      name,
-      lastName,
-      email,
-      password,
-      favoriteMuseums: [],
-    });
+  const user = await User.create({
+    name,
+    lastName,
+    email,
+    password,
+    favoriteMuseums: [],
+  });
 
-    res.json(user.serializedForLogin());
-  } catch (err) {
-    res.json({ message: err.message });
-  }
+  return res.status(201).json(user.serializedForLogin());
 };
 
 const signIn = async (req: Request, res: Response) => {
   const { email, password, rememberMe } = req.body;
 
-  try {
-    checkMissingFields([email, password]);
+  if (checkMissingFields([email, password]))
+    return res
+      .status(422)
+      .json({ message: 'There are missing fields in the body!' });
 
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (!user) throw new Error('No registered account found with this email');
+  if (!user)
+    return res
+      .status(422)
+      .json({ message: 'No user found with the specified email' });
 
-    const match = await bcrypt.compare(password, user.password);
+  const match = await bcrypt.compare(password, user.password);
 
-    if (!match) throw new Error('Wrong password');
+  if (!match) return res.status(422).json({ message: 'Wrong password' });
 
-    const cookieAge = 24 * 3600; // Default cookie expiry time is 1 day
+  const cookieAge = 24 * 3600; // Default cookie expiry time is 1 day
 
-    const token = await jwt.sign(
-      {
-        id: user.id,
-        role: user.role,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: cookieAge }
-    );
+  const token = await jwt.sign(
+    {
+      id: user.id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: cookieAge }
+  );
 
-    res.cookie('token', token, {
-      maxAge: rememberMe ? cookieAge * 14 * 1000 : cookieAge * 1000,
-      httpOnly: true,
-    });
+  res.cookie('token', token, {
+    maxAge: rememberMe ? cookieAge * 14 * 1000 : cookieAge * 1000,
+    httpOnly: true,
+  });
 
-    res.json(user.serializedForLogin());
-  } catch (err) {
-    res.json({ message: err.message });
-  }
+  return res.json(user.serializedForLogin());
 };
 
 const signOut = async (req: Request, res: Response) => {
@@ -68,7 +69,7 @@ const signOut = async (req: Request, res: Response) => {
 const getUsers = async (req: Request, res: Response) => {
   const users = await User.find().where('role').equals('normal');
 
-  res.json(users.map((user) => user.serializedForUserEndpoints()));
+  return res.json(users.map((user) => user.serializedForUserEndpoints()));
 };
 
 const getUser = async (req: Request, res: Response) => {
@@ -76,9 +77,12 @@ const getUser = async (req: Request, res: Response) => {
 
   const user = await User.findById(id);
 
-  if (!user) throw new Error('User not found');
+  if (!user)
+    return res
+      .status(422)
+      .json({ message: 'No user found with the specified ID' });
 
-  res.json(user.serializedForUserEndpoints());
+  return res.json(user.serializedForUserEndpoints());
 };
 
 export { signUp, signIn, signOut, getUsers, getUser };

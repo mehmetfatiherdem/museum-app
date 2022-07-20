@@ -6,22 +6,27 @@ import User from '../models/User';
 
 const getMuseums = async (req: Request, res: Response) => {
   const museums = await Museum.find();
-  if (museums.length === 0) throw new Error('There are no museums in the DB');
-  res.json(museums);
+  if (museums.length === 0)
+    return res.status(422).json({ message: 'No museum found in the DB' });
+  return res.json(museums);
 };
 
 const getMuseum = async (req: Request, res: Response) => {
   const { id } = req.params;
   const museum = await Museum.findById(id);
-  if (!museum) throw new Error(`Museum with the ID of ${id} doesn't exist`);
-  res.json(museum);
+  if (!museum)
+    return res
+      .status(422)
+      .json({ message: 'No museum found with the specified ID' });
+  return res.json(museum);
 };
 
 const filterMuseumsByCity = async (req: Request, res: Response) => {
   const { city } = req.query;
   const museums = await Museum.find({ city });
-  if (museums.length === 0) throw new Error('There are no museums in the DB');
-  res.json({
+  if (museums.length === 0)
+    return res.status(422).json({ message: 'No museum found in the DB' });
+  return res.json({
     data: {
       museums,
     },
@@ -31,58 +36,70 @@ const filterMuseumsByCity = async (req: Request, res: Response) => {
 const favMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {
   const { museumId } = req.body;
 
-  try {
-    checkMissingFields([museumId]);
+  if (checkMissingFields([museumId]))
+    return res
+      .status(422)
+      .json({ message: 'There are missing fields in the body!' });
 
-    const user = await User.findById(req.user.id);
-    if (!user) throw new Error('User not found');
+  const user = await User.findById(req.user.id);
+  if (!user)
+    return res
+      .status(422)
+      .json({ message: 'No user found with the specified ID' });
 
-    if (user.favoriteMuseums.includes(museumId)) {
-      throw new Error('Museum already in favorites');
-    }
-
-    user.favoriteMuseums.push(museumId);
-    await user.save();
-
-    res.json({
-      message: 'Museum added to favorites',
-      data: {
-        museumId,
-      },
-    });
-  } catch (err) {
-    res.json({ message: err.message });
+  if (user.favoriteMuseums.includes(museumId)) {
+    return res
+      .status(422)
+      .json({ message: 'Museum is already in the favorites' });
   }
+
+  user.favoriteMuseums.push(museumId);
+  await user.save();
+
+  return res.json({
+    message: 'Museum added to favorites',
+    data: {
+      museumId,
+    },
+  });
 };
 
 const removeFavMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {
   const { museumId } = req.body;
 
-  try {
-    checkMissingFields([museumId]);
+  if (checkMissingFields([museumId]))
+    return res
+      .status(422)
+      .json({ message: 'There are missing fields in the body!' });
 
-    const user = await User.findById(req.user.id);
-    if (!user) throw new Error('User not found');
+  const user = await User.findById(req.user.id);
+  if (!user)
+    return res
+      .status(422)
+      .json({ message: 'No museum found with the specified ID' });
 
-    if (!user.favoriteMuseums.includes(museumId)) {
-      throw new Error('Museum not in favorites');
-    }
-
-    user.favoriteMuseums.splice(user.favoriteMuseums.indexOf(museumId), 1);
-    await user.save();
-
-    res.json({ message: 'Museum removed from favorites', data: { museumId } });
-  } catch (err) {
-    res.json({ message: err.message });
+  if (!user.favoriteMuseums.includes(museumId)) {
+    return res.status(422).json({ message: 'Museum is not in the favorites' });
   }
+
+  user.favoriteMuseums.splice(user.favoriteMuseums.indexOf(museumId), 1);
+  await user.save();
+
+  return res.json({
+    message: 'Museum removed from favorites',
+    data: { museumId },
+  });
 };
 
 const getFavMuseums = async (req: IGetUserAuthInfoRequest, res: Response) => {
   const user = await User.findById(req.user.id);
 
-  if (!user) throw new Error('User not found');
+  if (!user)
+    return res
+      .status(422)
+      .json({ message: 'No user found with the specified ID' });
 
-  res.json({
+  return res.json({
     message: 'favorite museums retrieved successfully',
     data: {
       museums: user.favoriteMuseums,
@@ -93,17 +110,19 @@ const getFavMuseums = async (req: IGetUserAuthInfoRequest, res: Response) => {
 const getMuseumComments = async (req: Request, res: Response) => {
   const { id } = req.params;
   const museum = await Museum.findById(id);
-  if (!museum) throw new Error(`Museum with the ID of ${id} doesn't exist`);
+  if (!museum)
+    return res
+      .status(422)
+      .json({ message: 'No museum found with the specified ID' });
 
   await museum.populate('comments');
 
-  res.json({
+  return res.json({
     data: {
       comments: museum.comments,
     },
   });
 };
-
 
 export {
   getMuseums,

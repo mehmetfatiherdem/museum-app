@@ -11,39 +11,45 @@ const addComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
 
   const museum = await Museum.findById(museumId);
 
-  if (!museum) throw new Error('Museum not found');
+  if (!museum)
+    return res
+      .status(422)
+      .json({ message: 'No museum found with the specified ID' });
 
   const user = await User.findById(req.user.id);
 
-  if (!user) throw new Error('User not found');
+  if (!user)
+    return res.status(422).json({
+      message: 'No user found with the specified ID',
+    });
 
-  try {
-    checkMissingFields([text, museumId]);
-    const comment = await Comment.create({
+  if (checkMissingFields([text, museumId]))
+    return res
+      .status(422)
+      .json({ message: 'There are missing fields in the body!' });
+
+  const comment = await Comment.create({
+    text,
+    user: req.user.id,
+    museum: museumId,
+  });
+
+  museum.comments.push(comment._id);
+
+  await museum.save();
+
+  user.comments.push(comment._id);
+
+  await user.save();
+
+  return res.status(201).json({
+    message: 'comment successfully created',
+    data: {
+      commentId: comment.id,
+      userId: comment.user,
       text,
-      user: req.user.id,
-      museum: museumId,
-    });
-
-    museum.comments.push(comment._id);
-
-    await museum.save();
-
-    user.comments.push(comment._id);
-
-    await user.save();
-
-    res.json({
-      message: 'comment successfully created',
-      data: {
-        commentId: comment.id,
-        userId: comment.user,
-        text,
-      },
-    });
-  } catch (err) {
-    res.json({ message: err });
-  }
+    },
+  });
 };
 
 const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -57,22 +63,26 @@ const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
       return session.withTransaction(async () => {
         const comment = await Comment.findById(commentId);
         if (!comment)
-          throw new Error(`Comment with the ID of ${commentId} doesn't exist`);
-
-        console.log(`comment user = ${comment.user} user = ${req.user.id}`);
+          return res.status(422).json({
+            message: 'No comment found with the specified ID',
+          });
 
         if (!comment.user.equals(req.user.id))
-          throw new Error('You cannot delete a comment you did not create');
+          return res.status(422).json({
+            message: 'You cannot delete a comment you did not create',
+          });
 
         const museum = await Museum.findById(comment.museum);
         if (!museum)
-          throw new Error(
-            `Museum with the ID of ${comment.museum} doesn't exist`
-          );
+          return res.status(422).json({
+            message: 'No museum found with the specified ID',
+          });
 
         const user = await User.findById(comment.user);
         if (!user)
-          throw new Error(`User with the ID of ${comment.user} doesn't exist`);
+          return res.status(422).json({
+            message: 'No user found with the specified ID',
+          });
 
         museum.comments.splice(museum.comments.indexOf(commentId), 1);
         user.comments.splice(user.comments.indexOf(commentId), 1);
@@ -96,12 +106,14 @@ const getComment = async (req: Request, res: Response) => {
   const { commentId } = req.params;
   const comment = await Comment.findById(commentId);
   if (!comment)
-    throw new Error(`Comment with the ID of ${commentId} doesn't exist`);
+    return res.status(422).json({
+      message: 'No comment found with the specified ID',
+    });
 
   await comment.populate('user');
   await comment.populate('museum');
 
-  res.json({
+  return res.json({
     message: 'comment successfully retrieved',
     data: {
       commentId: comment.id,
@@ -117,15 +129,19 @@ const updateComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
 
   const comment = await Comment.findById(commentId);
   if (!comment)
-    throw new Error(`Comment with the ID of ${commentId} doesn't exist`);
+    return res.status(422).json({
+      message: 'No comment found with the specified ID',
+    });
   if (!comment.user.equals(req.user.id))
-    throw new Error('You cannot update a comment you did not create');
+    return res.status(422).json({
+      message: 'You cannot update a comment you did not create',
+    });
 
   comment.text = text;
 
   await comment.save();
 
-  res.json({
+  return res.status(201).json({
     message: 'comment successfully updated',
     data: {
       commentId: comment.id,
