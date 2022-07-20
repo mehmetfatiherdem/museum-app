@@ -10,6 +10,9 @@ Museum App API is a RESTful API that includes the backend logic of the applicati
 #### Live Demo Link (Heroku)
 https://ronchon-gerard-51245.herokuapp.com/
 
+#### Google Sign In
+https://ronchon-gerard-51245.herokuapp.com/google-sign
+
 ## Database Diagram
 
 ![Database](src/assets/database.png)
