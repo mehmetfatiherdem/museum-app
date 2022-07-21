@@ -69,3 +69,4 @@ https://ronchon-gerard-51245.herokuapp.com/google-sign
 - [Heroku](https://www.heroku.com/)
 - [Swagger](https://swagger.io/)
 - [Mocha](https://mochajs.org/)
+- [NodeMailer](https://nodemailer.com/about/)
