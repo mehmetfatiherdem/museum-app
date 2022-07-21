@@ -28,28 +28,32 @@ const addComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
       .status(422)
       .json({ message: 'There are missing fields in the body!' });
 
-  const comment = await Comment.create({
-    text,
-    user: req.user.id,
-    museum: museumId,
-  });
-
-  museum.comments.push(comment._id);
-
-  await museum.save();
-
-  user.comments.push(comment._id);
-
-  await user.save();
-
-  return res.status(201).json({
-    message: 'comment successfully created',
-    data: {
-      commentId: comment.id,
-      userId: comment.user,
+  try {
+    const comment = await Comment.create({
       text,
-    },
-  });
+      user: req.user.id,
+      museum: museumId,
+    });
+
+    museum.comments.push(comment._id);
+
+    await museum.save();
+
+    user.comments.push(comment._id);
+
+    await user.save();
+
+    return res.status(201).json({
+      message: 'comment successfully created',
+      data: {
+        commentId: comment.id,
+        userId: comment.user,
+        text,
+      },
+    });
+  } catch (err) {
+    return res.status(422).json({ message: err.message });
+  }
 };
 
 const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -137,17 +141,21 @@ const updateComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
       message: 'You cannot update a comment you did not create',
     });
 
-  comment.text = text;
+  try {
+    comment.text = text;
 
-  await comment.save();
+    await comment.save();
 
-  return res.status(201).json({
-    message: 'comment successfully updated',
-    data: {
-      commentId: comment.id,
-      text,
-    },
-  });
+    return res.status(201).json({
+      message: 'comment successfully updated',
+      data: {
+        commentId: comment.id,
+        text,
+      },
+    });
+  } catch (err) {
+    return res.status(422).json({ message: err.message });
+  }
 };
 
 export { addComment, removeComment, getComment, updateComment };

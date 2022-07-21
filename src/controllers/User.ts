@@ -12,15 +12,19 @@ const signUp = async (req: Request, res: Response) => {
       .status(422)
       .json({ message: 'There are missing fields in the body!' });
 
-  const user = await User.create({
-    name,
-    lastName,
-    email,
-    password,
-    favoriteMuseums: [],
-  });
+  try {
+    const user = await User.create({
+      name,
+      lastName,
+      email,
+      password,
+      favoriteMuseums: [],
+    });
 
-  return res.status(201).json(user.serializedForLogin());
+    return res.status(201).json(user.serializedForLogin());
+  } catch (err) {
+    return res.status(422).json({ message: err.message });
+  }
 };
 
 const signIn = async (req: Request, res: Response) => {

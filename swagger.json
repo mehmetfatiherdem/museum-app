@@ -267,7 +267,7 @@
                 "type": "object",
                 "properties": {
                   "museumId": {
-                    "type": "string",
+                    "type": "62cc0f109effca7605343be8",
                     "required": true
                   },
                   "text": {
@@ -459,7 +459,8 @@
                 "properties": {
                   "museumId": {
                     "type": "string",
-                    "required": true
+                    "required": true,
+                    "example": "62cc0f109effca7605343be8"
                   }
                 }
               }
@@ -500,7 +501,8 @@
                 "properties": {
                   "museumId": {
                     "type": "string",
-                    "required": true
+                    "required": true,
+                    "example": "62cc0f109effca7605343be8"
                   }
                 }
               }
