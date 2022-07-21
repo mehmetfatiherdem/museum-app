@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import 'dotenv/config';
 import express from 'express';
 import DBConnection from './db/Connection';
@@ -7,8 +6,9 @@ const port = process.env.NODE_LOCAL_PORT || 3000;
 import routes from './routes/Index';
 import cookieParser from 'cookie-parser';
 
-const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
+import session from 'express-session';
+import connectRedis from 'connect-redis';
+const RedisStore = connectRedis(session);
 import { createClient } from 'redis';
 const redisClient = createClient({
   host: process.env.REDIS_HOST,
@@ -40,24 +40,7 @@ redisClient.on('connect', function () {
 
 app.use(express.json());
 app.use(cookieParser());
-/*
-app.use(
-  session({
-    store: new RedisStore({
-      client: redisClient,
-    }),
-    saveUninitialized: false,
-    secret: process.env.REDIS_SECRET,
-    resave: false,
-    name: 'sid',
-    cookie: {
-      secure: false,
-      httpOnly: true,
-      maxAge: 1000 * 3600 * 24 * 1, // 1 day
-    },
-  })
-);
-*/
+
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
