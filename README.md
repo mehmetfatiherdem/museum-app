@@ -57,6 +57,7 @@ https://ronchon-gerard-51245.herokuapp.com/google-sign
   - Allow Google, Classic
 - Authentication
   - JWT
+- Weekly recommendation mail with cron job
 
 ### Built With
 
