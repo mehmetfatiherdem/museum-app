@@ -5,8 +5,8 @@ import userRoutes from './User';
 import csvRoutes from './CSVImport';
 import globalRoutes from './Global';
 
-router.use('/admin', adminRoutes);
-router.use('/user', userRoutes);
+router.use('/admins', adminRoutes);
+router.use('/users', userRoutes);
 router.use('/csv', csvRoutes);
 router.use('/global', globalRoutes);
 

@@ -49,9 +49,9 @@ const signIn = async (req: Request, res: Response) => {
 
     console.log(`req.session sign in = ${JSON.stringify(req.session)}`);
 
-    req.session.user = user;
+    // req.session.user = user;
 
-    console.log(`user ===> ${req.session.user}`);
+    //console.log(`user ===> ${req.session.user}`);
 
     res.json(user.serializedForLogin());
   } catch (err) {
@@ -61,10 +61,12 @@ const signIn = async (req: Request, res: Response) => {
 
 const signOut = async (req: Request, res: Response) => {
   console.log(`req.session before sign out = ${JSON.stringify(req.session)}`);
+  /*
   console.log(
     `req.session.user before sign out  ===> ${JSON.stringify(req.session.user)}`
   );
-  if (!req.session.user) {
+  */
+  if (!req.session) {
     res.json({ message: 'you should sign in first' }).end();
   } else {
     req.session.destroy((err) => console.log(`err = ${err}`));
