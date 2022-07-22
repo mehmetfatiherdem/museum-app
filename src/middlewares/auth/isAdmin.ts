@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const isAdmin = (req, res, next) => {
-  const { token } = req.cookies;
+  const { token } = req.signedCookies;
 
   if (!token)
     return res.status(401).json({ message: 'The user is not authenticated' });

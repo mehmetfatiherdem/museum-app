@@ -33,6 +33,7 @@ router.get(
     res.cookie('token', token, {
       maxAge: cookieAge * 1000,
       httpOnly: true,
+      signed: true,
     });
 
     res.redirect('/');

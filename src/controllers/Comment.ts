@@ -95,15 +95,13 @@ const removeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
         await user.save({ session });
         await comment.remove({ session });
 
-        return;
+        return res.json({
+          message: 'Comments successfully deleted',
+        });
       });
     })
     .then(() => Comment.countDocuments())
     .then(() => session.endSession());
-
-  return res.json({
-    message: 'Comments successfully deleted',
-  });
 };
 
 const getComment = async (req: Request, res: Response) => {

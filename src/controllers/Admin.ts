@@ -30,6 +30,7 @@ const loginAdmin = async (req: Request, res: Response) => {
   res.cookie('token', token, {
     maxAge: cookieAge,
     httpOnly: true,
+    signed: true,
   });
 
   return res.json({ message: admin.serializedForLogin() });

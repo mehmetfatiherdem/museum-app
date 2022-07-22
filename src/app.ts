@@ -12,7 +12,7 @@ import path from 'path';
 import MailCronService from './services/MailCronService';
 
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.set('view engine', 'ejs');

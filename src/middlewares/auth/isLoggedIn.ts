@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { IGetUserAuthInfoRequest } from '../../helpers/type';
 
 const isLoggedIn = (req: IGetUserAuthInfoRequest, res: Response, next) => {
-  const { token } = req.cookies;
+  const { token } = req.signedCookies;
 
   if (!token)
     return res.status(401).json({ message: 'The user is not authenticated' });

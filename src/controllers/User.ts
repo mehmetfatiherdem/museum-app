@@ -60,6 +60,7 @@ const signIn = async (req: Request, res: Response) => {
   res.cookie('token', token, {
     maxAge: rememberMe ? cookieAge * 14 * 1000 : cookieAge * 1000,
     httpOnly: true,
+    signed: true,
   });
 
   return res.json(user.serializedForLogin());
