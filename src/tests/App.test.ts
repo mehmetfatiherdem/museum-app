@@ -6,13 +6,13 @@ import app from '../app';
 chai.use(chaiHttp);
 
 describe('App Test', function () {
-  it('Returns Hello World!', function (done) {
+  it('Returns Home Page', function (done) {
     chai
       .request(app)
       .get('/')
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.text).to.equal('Hello World!');
+        expect(res.text).to.equal('Home Page');
         done();
       });
   });

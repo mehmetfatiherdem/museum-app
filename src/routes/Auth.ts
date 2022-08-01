@@ -36,7 +36,7 @@ router.get(
       signed: true,
     });
 
-    res.redirect('/');
+    res.redirect('/docs');
   }
 );
 

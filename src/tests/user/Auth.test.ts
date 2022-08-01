@@ -20,7 +20,7 @@ describe('User Auth Tests', function () {
     it('successful signup should return serialized user information', function (done) {
       chai
         .request(app)
-        .post('/api/user/signup')
+        .post('/api/users/signup')
         .send({
           name: 'anakin',
           lastName: 'skywalker',
@@ -28,12 +28,13 @@ describe('User Auth Tests', function () {
           password: '987654321!As',
         })
         .end((err, res) => {
-          expect(res.status).equal(200);
+          expect(res.status).equal(201);
           expect(res.body).to.deep.include({
             message: 'Welcome to the museum app anakin',
             data: {
               name: 'anakin',
               lastName: 'skywalker',
+              favMuseums: [],
               email: 'askywalker@gmail.com',
             },
           });
