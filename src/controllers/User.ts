@@ -28,7 +28,7 @@ const signUp = async (req: Request, res: Response) => {
 };
 
 const signIn = async (req: Request, res: Response) => {
-  const { email, password, rememberMe } = req.body;
+  const { email, password, rememberMe = false } = req.body;
 
   if (checkMissingFields([email, password]))
     return res
