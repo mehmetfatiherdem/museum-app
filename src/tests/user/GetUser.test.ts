@@ -4,6 +4,7 @@ import chaiHttp from 'chai-http';
 import app from '../../app';
 import DBConnection from '../../db/Connection';
 import User from '../../models/User';
+import { faker } from '@faker-js/faker';
 
 chai.use(chaiHttp);
 
@@ -13,18 +14,18 @@ describe('Get User Tests', function () {
 
   before(async () => {
     firstUser = new User({
-      name: 'first',
-      lastName: 'testUser',
-      email: 'firstTestUser@domain.com',
-      password: 'firstTestUser123!',
+      name: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(10, false, /[a-z]/, 'A123!'),
       favoriteMuseums: [],
     });
 
     secondUser = new User({
-      name: 'second',
-      lastName: 'testUser',
-      email: 'secondTestUser@domain.com',
-      password: 'secondTestUser123!',
+      name: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(10, false, /[a-z]/, 'A123!'),
       favoriteMuseums: [],
     });
 
@@ -44,22 +45,22 @@ describe('Get User Tests', function () {
         expect(res).to.have.status(200);
         expect(res.body).to.deep.equal([
           {
-            message: 'User info for first retrieved successfully',
+            message: `User info for ${firstUser.name} retrieved successfully`,
             data: {
-              name: 'first',
-              lastName: 'testUser',
-              email: 'firstTestUser@domain.com',
+              name: firstUser.name,
+              lastName: firstUser.lastName,
+              email: firstUser.email,
               role: 'normal',
               comments: [],
               favMuseums: [],
             },
           },
           {
-            message: 'User info for second retrieved successfully',
+            message: `User info for ${secondUser.name} retrieved successfully`,
             data: {
-              name: 'second',
-              lastName: 'testUser',
-              email: 'secondTestUser@domain.com',
+              name: secondUser.name,
+              lastName: secondUser.lastName,
+              email: secondUser.email,
               role: 'normal',
               comments: [],
               favMuseums: [],

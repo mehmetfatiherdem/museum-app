@@ -8,7 +8,9 @@ const getMuseums = async (req: Request, res: Response) => {
   const museums = await Museum.find();
   if (museums.length === 0)
     return res.status(422).json({ message: 'No museum found in the DB' });
-  return res.json(museums);
+  return res.json(
+    museums.map((museum) => museum.serializedForMuseumEndpoints())
+  );
 };
 
 const getMuseum = async (req: Request, res: Response) => {
@@ -18,7 +20,7 @@ const getMuseum = async (req: Request, res: Response) => {
     return res
       .status(422)
       .json({ message: 'No museum found with the specified ID' });
-  return res.json(museum);
+  return res.json(museum.serializedForMuseumEndpoints());
 };
 
 const filterMuseumsByCity = async (req: Request, res: Response) => {
@@ -26,11 +28,9 @@ const filterMuseumsByCity = async (req: Request, res: Response) => {
   const museums = await Museum.find({ city });
   if (museums.length === 0)
     return res.status(422).json({ message: 'No museum found in the DB' });
-  return res.json({
-    data: {
-      museums,
-    },
-  });
+  return res.json(
+    museums.map((museum) => museum.serializedForMuseumEndpoints())
+  );
 };
 
 const favMuseum = async (req: IGetUserAuthInfoRequest, res: Response) => {

@@ -20,6 +20,22 @@ export type WorkingTimes = {
   } | null;
 };
 
+type getMuseumReturnValData = {
+  name: string;
+  information: string;
+  photo: string;
+  builtYear: string;
+  city: string;
+  entranceFee: string;
+  workingHours: WorkingTimes;
+  comments: [Types.ObjectId];
+};
+
+export type getMuseumReturnVal = {
+  message: string;
+  data: getMuseumReturnValData;
+};
+
 type userLoginReturnValData = {
   name: string;
   lastName: string;
@@ -56,5 +72,3 @@ export type userEndpointReturnVal = {
   message: string;
   data: userEndpointReturnValData;
 };
-
-
